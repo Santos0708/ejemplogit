@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>wsrevit</artifactId>
+		<groupId>ec.gob.digercic.revit</groupId>
+		<version>2.0</version>
+	</parent>
+
+	<artifactId>wsrevit-ear</artifactId>
+	<packaging>ear</packaging>
+
+	<name>wsrevit-ear</name>
+	<url>http://www.jboss.org/products/eap</url>
+
+
+	<dependencies>
+		<!-- Depend on the ejb module and war so that we can package them -->
+		<!-- modificado CB -->
+		<dependency>
+			<groupId>${groupIdGeneral}</groupId>
+			<artifactId>wsrevit-web</artifactId>
+			<type>war</type>
+			<!-- <version>${project.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>${groupIdGeneral}</groupId>
+			<artifactId>wsrevit-ejb</artifactId>
+			<type>ejb</type>
+			<!-- <version>${project.version}</version> -->
+		</dependency>
+		<!-- modificado CB -->
+	</dependencies>
+
+	<build>
+		<finalName>${project.parent.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+				<version>${version.ear.plugin}</version>
+				<configuration>
+					<!-- Tell Maven we are using Java EE 6 -->
+					<version>6</version>
+					<archive>
+						<manifestEntries>
+							<Dependencies>org.apache.cxf, org.apache.cxf.impl</Dependencies>
+						</manifestEntries>
+					</archive>
+					<!-- Use Java EE ear libraries as needed. Java EE ear libraries are 
+						in easy way to package any libraries needed in the ear, and automatically 
+						have any modules (EJB-JARs and WARs) use them -->
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+
+					<!-- modificado CB -->
+					<earName>${web-app-name}</earName>
+					<!-- modificado CB -->
+
+					<modules>
+						
+						<!-- <webModule> <groupId>ec.gob.digercic.revit</groupId> <artifactId>wsrevit-web</artifactId> 
+							<contextRoot>/wsrevit</contextRoot> </webModule> -->
+						<!-- modificado CB -->
+						<webModule>
+							<groupId>${groupIdGeneral}</groupId>
+							<artifactId>wsrevit-web</artifactId>
+							<!-- <uri>${web-app-name}.war</uri>$$ <bundleFileName>${web-app-name}.war</bundleFileName> 
+								$$ -->
+							<contextRoot>/${context-web-path}</contextRoot>
+						</webModule>
+						<!-- modificado CB -->
+					</modules>
+					<fileNameMapping>no-version</fileNameMapping>
+				</configuration>
+			</plugin>
+			<!-- The WildFly plugin deploys your ear to a local WildFly container -->
+			<!-- Due to Maven's lack of intelligence with EARs we need to configure 
+				the wildfly maven plugin to skip deployment for all modules. We then enable 
+				it specifically in the ear module. -->
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<configuration>
+					<filename>wsrevit.ear</filename>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>openshift</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-ear-plugin</artifactId>
+						<version>${version.ear.plugin}</version>
+						<configuration>
+							<outputDirectory>deployments</outputDirectory>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

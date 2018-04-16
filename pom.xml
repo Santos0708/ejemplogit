@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ec.gob.digercic.revit</groupId>
+	<artifactId>wsrevit</artifactId>
+	<version>2.0</version>
+	<packaging>pom</packaging>
+
+	<name>wsrevit</name>
+
+	<!-- <url>http://jboss.org/jbossas</url> -->
+	<!-- <licenses> -->
+	<!-- <license> -->
+	<!-- <name>Apache License, Version 2.0</name> -->
+	<!-- <distribution>repo</distribution> -->
+	<!-- <url>http://www.apache.org/licenses/LICENSE-2.0.html</url> -->
+	<!-- </license> -->
+	<!-- </licenses> -->
+
+	<properties>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- JBoss dependency versions -->
+
+		<version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+
+		<!-- Define the version of the JBoss BOMs we want to import to specify 
+			tested stacks. -->
+		<version.jboss.bom.eap>7.1.0.GA</version.jboss.bom.eap>
+
+		<version.jboss.as>7.5.0.Final-redhat-21</version.jboss.as>
+
+		<!-- other plugin versions -->
+		<version.ear.plugin>2.10</version.ear.plugin>
+		<version.ejb.plugin>2.3</version.ejb.plugin>
+		<version.surefire.plugin>2.10</version.surefire.plugin>
+		<version.war.plugin>2.5</version.war.plugin>
+
+		<!-- maven-compiler-plugin -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+
+		<!-- añadidos CB - variables pom hijos -->
+		<groupIdGeneral>ec.gob.digercic.revit</groupIdGeneral>
+		<project.version>2.0</project.version>
+		<web-app-name>wsrevit</web-app-name>
+		<context-web-path>wsrevit</context-web-path>
+
+		<ejb.version>3.1</ejb.version>
+		<java.version>1.8</java.version>
+		<mavenwarplugin.version>2.6</mavenwarplugin.version>
+		<mavenCompilerPlugin.version>3.5.1</mavenCompilerPlugin.version>
+		<mavenjarplugin.version>3.0.2</mavenjarplugin.version>
+		<mavenresourcesplugin.version>2.5</mavenresourcesplugin.version>
+		<primefaces.version>5.3</primefaces.version>
+		<com.sun.faces.version>2.2.2</com.sun.faces.version>
+		<jstl.version>1.2</jstl.version>
+		<axis2.version>1.6.4</axis2.version>
+		<axis.version>1.4</axis.version>
+		<el-impl.version>2.2</el-impl.version>
+		<cxf.version>3.1.10</cxf.version>
+		<jcaptcha.version>1.0-all</jcaptcha.version>
+		<barcode4j.version>2.0</barcode4j.version>
+		<groovy.version>1.8.0</groovy.version>
+		<batick.version>1.6</batick.version>
+		<jasper.version>5.1.0</jasper.version>
+		<ojdbc.version>11.2.0.3</ojdbc.version>
+		<javax.mail.version>1.4</javax.mail.version>
+		<apacheCommonsIo>1.3.2</apacheCommonsIo>
+		<jbossLoggin.version>3.3.0.Final</jbossLoggin.version>
+		<jsom.version>2.0.6</jsom.version>
+		<hibernate.version>5.2.2.Final</hibernate.version>
+		<javax-validation.version>1.0.0.GA</javax-validation.version>
+		<omnifaces.version>1.8.1</omnifaces.version>
+		<xmlbeans.version>2.4.0</xmlbeans.version>
+		<javaxel.version>2.2.1-b04</javaxel.version>
+		<javaxservletjsp.version>2.1</javaxservletjsp.version>
+		<javaxservlet.api.version>3.0.1</javaxservlet.api.version>
+		<javaxvalidation.version>1.0.0.GA</javaxvalidation.version>
+		<jta.version>1.1</jta.version>
+		<joda-time.version>2.9.9</joda-time.version>
+
+
+		<!-- añadidos CB -->
+
+	</properties>
+
+	<modules>
+		<module>ejb</module>
+		<module>web</module>
+		<module>ear</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Define the version of the EJB jar so that we don't need to repeat 
+				ourselves in every module -->
+			<dependency>
+				<groupId>ec.gob.digercic.revit</groupId>
+				<artifactId>wsrevit-ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+
+			<!-- Define the version of the WAR so that we don't need to repeat ourselves 
+				in every module -->
+			<dependency>
+				<groupId>ec.gob.digercic.revit</groupId>
+				<artifactId>wsrevit-web</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+				<scope>compile</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.jboss.bom</groupId>
+				<artifactId>jboss-eap-javaee7-with-tools</artifactId>
+				<version>${version.jboss.bom.eap}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- <plugin> <groupId>org.jboss.as.plugins</groupId> <artifactId>jboss-as-maven-plugin</artifactId> 
+					<version>${version.jboss.maven.plugin}</version> <inherited>true</inherited> 
+					<configuration> <skip>true</skip> </configuration> </plugin> -->
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>1.2.1.Final</version>
+					<inherited>true</inherited>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<!-- Repositorios añadidos de JBOSS EAP - configurar en archivo settings.xml de Maven -->
+    <repositories>
+        <repository>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>
